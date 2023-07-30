@@ -1,16 +1,36 @@
 import React, { useState } from "react";
 import { BiSolidUserCircle } from "react-icons/bi";
 
-const Login = (props) => {
+import axios from "axios";
+
+const Signup = () => {
   const [user, setUser] = useState({
     email: "",
     first_name: "",
     last_name: "",
     password: "",
   });
+  const [errorExists, setErrorExists] = useState(false);
 
-  const login = (first_name, last_name, email, password) => {
+  const signup = async (first_name, last_name, email, password) => {
     console.log(first_name, last_name, email, password);
+
+    try {
+      const result = await axios.post("http://localhost:8800/signup", {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        password: password,
+      });
+      console.log(result.data);
+      if (result.data === "User already exists.") {
+        setErrorExists(true);
+      } else {
+        setErrorExists(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -58,14 +78,18 @@ const Login = (props) => {
       />
       <button
         onClick={() => {
-          login(user.first_name, user.last_name, user.email, user.password);
+          signup(user.first_name, user.last_name, user.email, user.password) ===
+            "User already exists.";
         }}
         className="w-full px-4 py-2 text-white border border-gray-200 rounded-md shadow-lg bg-green-700 mt-5"
       >
         Submit
       </button>
+      {errorExists ? (
+        <div className="text-red-500">Try again: User already exists!</div>
+      ) : null}
     </>
   );
 };
 
-export default Login;
+export default Signup;
