@@ -39,13 +39,14 @@ const Signup = () => {
       <b className="text-slate-800">Email:</b>
       <input
         type="email"
-        className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-200 border border-gray-200 rounded"
+        className="w-full px-4 py-2 mt-2 text-gray-700 bg-gray-200 border border-gray-200 rounded invalid:text-red-500 peer"
         placeholder="Enter email"
         onChange={(e) => {
           var usr = user;
           setUser({ ...usr, email: e.target.value });
         }}
       />
+      <div className="hidden peer-invalid:block text-red-500">Please enter a valid email address.</div>
       <b className="text-slate-800">First Name:</b>
       <input
         type="text"

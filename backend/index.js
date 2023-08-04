@@ -17,7 +17,7 @@ app.post("/signup", (req, res) => {
     database: "UserApp",
   });
 
-  var query =
+  const query =
     'INSERT INTO UserInfo (FirstName, LastName, Email, DateJoined, GUID, Password) VALUES ("' +
     req.body.first_name +
     '", "' +
@@ -52,6 +52,32 @@ app.post("/signup", (req, res) => {
         error = "";
       }
       res.send(error);
+      db.end();
+    });
+  });
+  console.log(req.body);
+});
+
+app.post("/login", (req, res) => {
+  const db = mysql.createConnection({
+    host: "192.168.0.12",
+    user: "jsconnect",
+    password: process.env.DB_PASSWORD,
+    port: "3306",
+    database: "UserApp",
+  });
+
+  const query =
+    "SELECT * FROM UserInfo WHERE Email = '" +
+    req.body.email +
+    "' AND Password = '" +
+    req.body.password +
+    "';";
+
+  db.connect(async (err) => {
+    if (err) throw err;
+    db.query(query, function (err, result, fields) {
+      res.send(result);
       db.end();
     });
   });
